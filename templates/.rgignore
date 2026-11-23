@@ -1,0 +1,2 @@
+# Skip the archive in ripgrep searches by default (use rg --no-ignore to include it).
+docs/archive/
