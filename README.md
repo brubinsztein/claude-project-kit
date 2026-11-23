@@ -68,7 +68,7 @@ Claude writes the notes from your conversation. You make the decisions and appro
 | Note | Created when | Written by |
 |---|---|---|
 | Product brief (`docs/brief/`) | At the start, from Claude's questions and your answers. Updated when the shape of the product changes. | Claude drafts, you approve |
-| Feature brief (`docs/brief/features/`) | When a new feature is asked for. Claude first asks clarifying questions, then writes one short document with the scope and steps. An index line is added, and it is archived when the feature is live. | Claude drafts, you approve |
+| Feature brief (`docs/brief/features/`) | When a new feature is asked for. Claude first asks clarifying questions, then writes a short brief for your approval, then adds a plan to the same document for your approval. An index line is added, and it is archived when the feature is live. | Claude drafts, you approve |
 | Implementation plan (`docs/planning/`) | After the brief is approved. | Claude drafts, you approve |
 | To-do list (`docs/current/todo.md`) | Built from the plan. New ideas are added as next steps or parked as you raise them. Ticked when work lands. | Claude |
 | Decision tracker (`docs/current/decision-tracker.md`) | One line each time you decide something, with the reason. | Claude |
