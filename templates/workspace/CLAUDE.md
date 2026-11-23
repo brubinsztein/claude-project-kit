@@ -6,7 +6,7 @@ This workspace holds several projects. Rules here apply to all of them. Each pro
 - {{ABOUT_ME}}  (for example: "I'm a Product Manager. I'm not a technical person.")
 
 ## Projects
-One line each. State lives in each project's own `next-steps.md`, never here.
+One line each. State lives in each project's own `docs/current/todo.md`, never here.
 
 | Project | Folder | What it is |
 |---|---|---|

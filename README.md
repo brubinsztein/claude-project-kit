@@ -32,17 +32,17 @@ Claude forgets everything between sessions. Whatever is not written in a file is
 | Part | Role |
 |---|---|
 | A short rulebook (`CLAUDE.md`) | The standing rules Claude reads at the start of every session: how to talk to you, when to ask, when to update notes, how to handle git. Short, because it is read every time. |
-| Three working notes (`next-steps.md`, a to-do list, a decision tracker) | The project's memory between sessions. One says where things stand, one lists what is next, one records decisions and the reason for each. |
+| Two working notes (a to-do list that starts with a "where we are" summary, and a decision tracker) | The project's memory between sessions. One says where things stand and what is next, the other records decisions and the reason for each. |
 | A wrap-up routine (the session-checkpoint skill) | At the end of a session it compares what was saved with what the notes say, fixes the gaps, and refreshes the "where we are" block. |
 | Specialist helpers (agents) | Small definitions for recurring jobs, such as changing code or rewriting documents. Each says when to use it, so Claude picks correctly. |
 | Safe permissions (`settings.json`) | Which commands run freely, which ask first, and which are blocked. |
 | Indexes and an archive | A short index in each docs folder lists what is current. Finished material moves to `docs/archive/`, which searches skip by default. |
 
 ```
-Start of session:   Claude reads CLAUDE.md (rules) and next-steps.md (where we are)
+Start of session:   Claude reads CLAUDE.md (rules) and the top of todo.md (where we are)
 During work:        notes are left alone; helpers take big jobs, Claude does small edits
 Work finishes:      one line ticked in the to-do list; one line added if a decision was made
-End of session:     the wrap-up routine fixes any gaps and refreshes next-steps.md
+End of session:     the wrap-up routine fixes any gaps and refreshes the "where we are" block
 ```
 
 ## Brief, plan, then build
@@ -73,7 +73,7 @@ Claude writes the notes from your conversation. You make the decisions and appro
 | Decision tracker (`docs/current/decision-tracker.md`) | One line each time you decide something, with the reason. | Claude |
 | Focused design notes (`docs/planning/`) | When a feature needs thinking through. An index line is added, and the note is archived when the work is finished. | Claude |
 | Reference docs (`docs/reference/`) | When something stable needs writing down, such as how to run the project or a map of the code. An index line is added. | Claude |
-| "Where we are" (`next-steps.md`) | Rewritten by the wrap-up routine at the end of each session. | Claude |
+| "Where we are" (top of `docs/current/todo.md`) | Rewritten by the wrap-up routine at the end of each session. | Claude |
 | Memory (kept outside the project) | When you correct Claude or state a preference. | Claude |
 
 ## How helpers work
@@ -94,18 +94,18 @@ You can ask "which helper would you use for this?" at any time. To add a helper 
 
 This is the whole routine once the project is set up.
 
-1. Start a session. Open Claude Code in the project folder and start talking. Claude reads its rulebook and `next-steps.md` on its own. If you want a summary, ask "where are we?".
+1. Start a session. Open Claude Code in the project folder and start talking. Claude reads its rulebook and the top of the to-do list on its own. If you want a summary, ask "where are we?".
 2. Ask for work. Describe what you want, and answer Claude's questions as they come up (see "How Claude asks you questions"). Early in a project Claude takes you through the brief and the plan before it builds anything (see "Brief, plan, then build"). Later it asks questions if anything is unclear, hands large jobs to a specialist helper and reads only the short report it sends back (see "How helpers work"), and does small edits itself. Anything big or hard to undo comes to you for a decision first.
 3. While something is in progress, Claude leaves the notes alone, which keeps them free of clutter.
 4. When a piece of work is done, Claude ticks its line in the to-do list. "Done" means the tests pass and the work is saved.
 5. When you decide something ("let's go with option B"), Claude adds one line to the decision tracker with the reason.
 6. At the end of a session, say "run the checkpoint" (or "wrap up"). Claude compares what was saved with what the notes say, fixes anything missed, rewrites the short "where we are" block, saves everything, and tells you what has not been pushed to the shared copy. It asks before pushing.
-7. Next session, a fresh Claude picks up from `next-steps.md`.
+7. Next session, a fresh Claude picks up from the to-do list.
 
 | You | Claude |
 |---|---|
 | Say what you want and make the decisions | Asks questions, does or delegates the work, runs the tests |
-| Say "run the checkpoint" when you stop | Updates the to-do list, decision tracker and `next-steps.md`, then saves |
+| Say "run the checkpoint" when you stop | Updates the to-do list (including "where we are") and the decision tracker, then saves |
 | Approve pushes and deletes when asked | Keeps the project folder tidy and on the main branch |
 
 Useful things to say:
@@ -139,7 +139,7 @@ Follow these steps in order. Never overwrite a file that already exists: if one 
 3. Agents: keep only the agents the project needs. Rewrite each description to name the project's real files and keywords ("Use proactively when..."), and fill the agent table in `CLAUDE.md` (five lines or fewer). Remove any agent file you do not use.
 4. Permissions: set the test command prefix in `.claude/settings.json`. Leave project-specific one-off permissions out; they build up in `.claude/settings.local.json`, which stays out of git.
 5. Git: make sure `.claude/.gitignore` is in place and the main working folder is on the main branch. Make one initial commit of the setup. Do not push unless asked.
-6. Start the notes. For a new project, interview the owner one question at a time (AskUserQuestion) to draft `docs/brief/product-brief.md` from the template, and stop for approval. Once the brief is approved, draft `docs/planning/implementation-plan.md` from its template and stop for approval again. Then build the first "Next steps" in `docs/current/todo.md` from the plan and fill in the "Where we are" block in `next-steps.md`. For a project already under way, ask where its existing notes are, summarise them into the three working notes, and record which stage it is at.
+6. Start the notes. For a new project, interview the owner one question at a time (AskUserQuestion) to draft `docs/brief/product-brief.md` from the template, and stop for approval. Once the brief is approved, draft `docs/planning/implementation-plan.md` from its template and stop for approval again. Then build the first "Next steps" in `docs/current/todo.md` from the plan, and fill in the "Where we are" block at the top of that file. For a project already under way, ask where its existing notes are, summarise them into the two working notes, and record which stage it is at.
 7. Baseline: run `/context` in a fresh session and note the starting size in `docs/current/decision-tracker.md`, so later changes can be measured.
 8. Report to the owner in plain language: what was created, what to review, and the routine in "Day to day" above.
 
@@ -167,7 +167,7 @@ workspace/
   shared/            context used by more than one project, with an index (README.md)
   project-a/         its own git repository
     CLAUDE.md        only what is specific to this project
-    next-steps.md, docs/current/...    this project's notes
+    docs/current/todo.md, decision-tracker.md    this project's notes
     .claude/         this project's permissions, helpers and checkpoint skill
   project-b/
 ```
@@ -175,7 +175,7 @@ workspace/
 What goes where:
 - The workspace `CLAUDE.md` holds the rules that stay the same across projects: how to communicate, when to ask, how big a job must be before it goes to a helper, and how to handle git. It also lists the projects, one line each. Every session loads it, so keep it short.
 - Each project's own `CLAUDE.md` holds only its stage, its guardrails, its helpers and where its notes are. Use `templates/workspace/project-CLAUDE.md`.
-- Each project keeps its own working notes (`next-steps.md`, to-do list, decision tracker). Leave project status out of the workspace files; they only point to each project.
+- Each project keeps its own working notes (the to-do list with its "where we are" block, and the decision tracker). Leave project status out of the workspace files; they only point to each project.
 - `shared/` holds background more than one project needs, such as who your audiences are or your writing rules. Add one line to its index for each file. If only one project needs something, keep it in that project.
 
 How day to day changes:
@@ -201,14 +201,14 @@ To check what Claude loaded in a session, type `/status` and look at the setting
 
 ### A workspace that is not about code
 
-For a general assistant workspace, keep the rulebook, the three working notes, the wrap-up routine and `shared/` (put your preferences, recurring contacts and context there). Drop the coder helper, the test command and the git rules if there is no repository. Add helpers for the jobs you repeat, such as drafting, research or meeting notes.
+For a general assistant workspace, keep the rulebook, the two working notes, the wrap-up routine and `shared/` (put your preferences, recurring contacts and context there). Drop the coder helper, the test command and the git rules if there is no repository. Add helpers for the jobs you repeat, such as drafting, research or meeting notes.
 
 ## What is inside
 
 | File | What it is |
 |---|---|
 | `templates/CLAUDE.md` | The rulebook. |
-| `templates/next-steps.md`, `templates/docs/current/todo.md`, `templates/docs/current/decision-tracker.md` | The three working notes. |
+| `templates/docs/current/todo.md`, `templates/docs/current/decision-tracker.md` | The two working notes. |
 | `templates/docs/brief/product-brief.md`, `templates/docs/planning/implementation-plan.md` | Starting points for the brief and the plan that Claude drafts with you. |
 | `templates/.claude/skills/session-checkpoint/` | The wrap-up routine. |
 | `templates/.claude/agents/` | Two starter helpers: an implementation coder and a docs maintainer. |
@@ -243,3 +243,4 @@ When your setup improves, change the kit in the same sitting: update the templat
 
 - 23 Nov 2026: first version.
 - 23 Nov 2026: added guidance and templates for a workspace that holds several projects; removed MEASURING.md.
+- 23 Nov 2026: merged `next-steps.md` into the top of the to-do list, so there are two working notes instead of three.

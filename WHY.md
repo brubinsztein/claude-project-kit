@@ -50,15 +50,15 @@ Because Claude does the writing, the notes stay consistent in format and you onl
 
 ## 4. Notes that stay current
 
-Three small files act as the project's memory. `next-steps.md` says where things stand and what to read first. `docs/current/todo.md` lists what is next. `docs/current/decision-tracker.md` records decisions and the reason for each.
+Two small files act as the project's memory. `docs/current/todo.md` starts with a short "where we are" block that says where things stand and what to read first, then lists what is next. `docs/current/decision-tracker.md` records decisions and the reason for each.
 
 Updates happen at set moments:
 - While work is in progress, nothing is updated.
 - When a piece of work is finished (its tests pass and it is saved), one line in the to-do list is ticked.
 - When you make a decision, one line goes in the decision tracker.
-- At the end of a session, the wrap-up routine compares what was saved with what the to-do list says, fixes any gaps, and rewrites a short "where we are" block in `next-steps.md`.
+- At the end of a session, the wrap-up routine compares what was saved with what the to-do list says, fixes any gaps, and rewrites the short "where we are" block at the top of the to-do list.
 
-There is one handoff, in `next-steps.md`, and no pile of dated notes. A new session can start from these three short files and know the state of the project. The notes need no constant upkeep, and half-finished work does not clutter them.
+There is one handoff, the "where we are" block at the top of the to-do list, and no pile of dated notes. A new session can start from these two short files and know the state of the project. The notes need no constant upkeep, and half-finished work does not clutter them.
 
 The moments for updating notes are written in the "Keeping docs current" section of `CLAUDE.md`, and the wrap-up steps are in `templates/.claude/skills/session-checkpoint/SKILL.md`. Change them there.
 

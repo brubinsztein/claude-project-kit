@@ -19,15 +19,14 @@
 - For any human-facing writing (reports, one-pagers, summaries), follow `docs/reference/writing-style-rules.md` if it exists.
 
 ## Working docs and routing
-- `next-steps.md` is a short router and "where we are" entry point, never a running log.
-- Default working docs: `next-steps.md`, `docs/current/todo.md`, `docs/current/decision-tracker.md`.
+- Default working docs: `docs/current/todo.md` (starts with a short "Where we are" block) and `docs/current/decision-tracker.md`.
 - Read other docs only when the task needs them: `docs/brief/`, `docs/planning/` (index in its README), `docs/reference/` (index in its README), `docs/archive/` (history; not read by default).
 
 ## Keeping docs current
 - While work is in progress, do not touch the docs.
 - An item has landed only when its relevant tests pass and it is committed, merged or confirmed done. At that point, tick or move its line in `todo.md` in the same change.
 - When a decision is made, add one line to `decision-tracker.md`.
-- At a checkpoint or end of session, run the session-checkpoint skill. It reconciles the three working docs against `git log`.
+- At a checkpoint or end of session, run the session-checkpoint skill. It reconciles the two working docs against `git log`.
 - Never create dated handoff notes. Finished or superseded material goes to `docs/archive/`. `todo.md` "Recently done" holds at most 3 one-liners; older entries go to `docs/archive/done-log.md`.
 
 ## Clarification and assumptions
