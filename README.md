@@ -33,12 +33,37 @@ Work finishes:      one line ticked in the to-do list; one line added if a decis
 End of session:     the wrap-up routine fixes any gaps and refreshes next-steps.md
 ```
 
+## Brief, plan, then build
+
+By default Claude does not start building straight away. A project moves through three stages, and Claude stays in each one until you approve moving on.
+
+1. Brief. Claude asks you clarifying questions, one at a time, and writes the answers into a short product brief: what you are making, who it is for, and what success looks like.
+2. Plan. Once you approve the brief, Claude drafts a step-by-step implementation plan: the tasks in order, what depends on what, and what can run in parallel. The plan stays at a middle level of detail, and deeper technical detail goes in separate focused documents that the plan links to.
+3. Build. Once you approve the plan, Claude builds against it and does not reopen settled decisions unless you ask.
+
+Big decisions, such as architecture, new tools or anything hard to undo, always come to you first, whatever the stage. Mistakes are cheapest to fix while they are still words on a page, and an approved brief and plan give every later session, and every helper agent, the same picture of what is being built. If a project is already under way, tell Claude which stage it is at and it starts there. You can rename the stages or change the rule in the Workflow section of `CLAUDE.md`.
+
+## Where the notes come from
+
+Claude writes the notes from your conversation. You make the decisions and approve; you rarely type a note yourself. You can also say "write that down" at any moment.
+
+| Note | Created when | Written by |
+|---|---|---|
+| Product brief (`docs/brief/`) | At the start, from Claude's questions and your answers. Updated when the shape of the product changes. | Claude drafts, you approve |
+| Implementation plan (`docs/planning/`) | After the brief is approved. | Claude drafts, you approve |
+| To-do list (`docs/current/todo.md`) | Built from the plan. New ideas are added as next steps or parked as you raise them. Ticked when work lands. | Claude |
+| Decision tracker (`docs/current/decision-tracker.md`) | One line each time you decide something, with the reason. | Claude |
+| Focused design notes (`docs/planning/`) | When a feature needs thinking through. An index line is added, and the note is archived when the work is finished. | Claude |
+| Reference docs (`docs/reference/`) | When something stable needs writing down, such as how to run the project or a map of the code. An index line is added. | Claude |
+| "Where we are" (`next-steps.md`) | Rewritten by the wrap-up routine at the end of each session. | Claude |
+| Memory (kept outside the project) | When you correct Claude or state a preference. | Claude |
+
 ## Day to day: how you use it
 
 This is the whole routine once the project is set up.
 
 1. Start a session. Open Claude Code in the project folder and start talking. Claude reads its rulebook and `next-steps.md` on its own. If you want a summary, ask "where are we?".
-2. Ask for work. Describe what you want. Claude asks questions if anything is unclear, hands large jobs to a specialist helper, and does small edits itself. Anything big or hard to undo comes to you for a decision first.
+2. Ask for work. Describe what you want. Early in a project Claude takes you through the brief and the plan before it builds anything (see "Brief, plan, then build"). Later it asks questions if anything is unclear, hands large jobs to a specialist helper, and does small edits itself. Anything big or hard to undo comes to you for a decision first.
 3. While something is in progress, Claude leaves the notes alone, which keeps them free of clutter.
 4. When a piece of work is done, Claude ticks its line in the to-do list. "Done" means the tests pass and the work is saved.
 5. When you decide something ("let's go with option B"), Claude adds one line to the decision tracker with the reason.
@@ -73,7 +98,7 @@ Follow these steps in order. Never overwrite a file that already exists: if one 
    - Whether this is a single project or a shared workspace that holds several projects. If it is a shared workspace, follow "Setting up a shared workspace" below as well.
    - Project name and a one-line description.
    - The owner's role and how technical they are (this fills "About me" and sets how much you explain).
-   - Current stage (for example brief, planning, implementation) and the stage names to use.
+   - Whether the project is new (it starts at the brief) or already under way, and if so which stage it is at and which notes already exist.
    - The main branch name, and whether a remote repository exists.
    - The command that runs the tests, and where the tests and main code live.
    - The project's guardrails (things agents must never do), if any.
@@ -82,14 +107,15 @@ Follow these steps in order. Never overwrite a file that already exists: if one 
 3. Agents: keep only the agents the project needs. Rewrite each description to name the project's real files and keywords ("Use proactively when..."), and fill the agent table in `CLAUDE.md` (five lines or fewer). Remove any agent file you do not use.
 4. Permissions: set the test command prefix in `.claude/settings.json`. Leave project-specific one-off permissions out; they build up in `.claude/settings.local.json`, which stays out of git.
 5. Git: make sure `.claude/.gitignore` is in place and the main working folder is on the main branch. Make one initial commit of the setup. Do not push unless asked.
-6. Baseline: run `/context` in a fresh session and note the starting size in `docs/current/decision-tracker.md`, so later changes can be measured.
-7. Report to the owner in plain language: what was created, what to review, and the routine in "Day to day" above.
+6. Start the notes. For a new project, interview the owner one question at a time (AskUserQuestion) to draft `docs/brief/product-brief.md` from the template, and stop for approval. Once the brief is approved, draft `docs/planning/implementation-plan.md` from its template and stop for approval again. Then build the first "Next steps" in `docs/current/todo.md` from the plan and fill in the "Where we are" block in `next-steps.md`. For a project already under way, ask where its existing notes are, summarise them into the three working notes, and record which stage it is at.
+7. Baseline: run `/context` in a fresh session and note the starting size in `docs/current/decision-tracker.md`, so later changes can be measured.
+8. Report to the owner in plain language: what was created, what to review, and the routine in "Day to day" above.
 
 | Placeholder | Filled from |
 |---|---|
 | `{{PROJECT_NAME}}`, `{{DATE}}` | Project name; today's date |
 | `{{ABOUT_ME}}` | The owner's role and how technical they are |
-| `{{WORKFLOW_STAGES}}`, `{{CURRENT_STAGE}}` | The stage names and the current stage |
+| `{{CURRENT_STAGE}}` | The stage the project is at (brief, plan or implementation) |
 | `{{MAIN_BRANCH}}` | The main branch name |
 | `{{TEST_COMMAND_PREFIX}}` | The command that runs tests (for example `python -m pytest`) |
 | `{{AGENT_TABLE}}` | One line per kept agent: task type, then agent name |
@@ -151,6 +177,7 @@ For a general assistant workspace, keep the rulebook, the three working notes, t
 |---|---|
 | `templates/CLAUDE.md` | The rulebook. |
 | `templates/next-steps.md`, `templates/docs/current/todo.md`, `templates/docs/current/decision-tracker.md` | The three working notes. |
+| `templates/docs/brief/product-brief.md`, `templates/docs/planning/implementation-plan.md` | Starting points for the brief and the plan that Claude drafts with you. |
 | `templates/.claude/skills/session-checkpoint/` | The wrap-up routine. |
 | `templates/.claude/agents/` | Two starter helpers: an implementation coder and a docs maintainer. |
 | `templates/.claude/settings.json`, `templates/.claude/.gitignore` | Permissions, and git ignore rules that keep personal settings out of the repository. |
@@ -162,7 +189,7 @@ For a general assistant workspace, keep the rulebook, the three working notes, t
 
 None of this is fixed. Change what suits your project, and read the matching section of `WHY.md` first so you know what it was doing.
 
-- Stages and tone: the workflow stages and the "Communication" rules in `CLAUDE.md`.
+- Stages and tone: the workflow stages and the "Communication" rules in `CLAUDE.md`. If you would rather not plan first on a small project, relax the "plan before coding" rule there.
 - Helpers: add, remove or rename agents. To add one for a job your project repeats, copy `templates/.claude/agents/implementation-coder.md`, change its name and description (say when to use it and name the real files), and add a line to the agent table in `CLAUDE.md`. Keep the table to five lines or fewer.
 - Permissions: add generic rules for commands you use often. Never put a password or key in a rule.
 - The wrap-up routine: its steps are in `templates/.claude/skills/session-checkpoint/SKILL.md`. Add a step if your project needs one.

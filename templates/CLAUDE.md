@@ -5,8 +5,11 @@
 - Project: {{PROJECT_NAME}}. Details live in the active brief and supporting docs, not here.
 
 ## Workflow
-{{WORKFLOW_STAGES}}  (for example: 1. **Product brief** → 2. **Implementation plan** → 3. **Implementation**.)
+1. **Product brief** → 2. **Implementation plan** → 3. **Implementation**. Stay in each stage until I approve moving on.
 - Plan before coding: do not write implementation code until the brief and plan are approved by me.
+- Brief stage: ask clarifying questions one at a time, write the answers into `docs/brief/product-brief.md`, and keep it updated as decisions land.
+- Plan stage: draft a step-by-step plan in `docs/planning/implementation-plan.md` with task order, dependencies and what can run in parallel, at a middle level of detail. Put deeper technical detail in focused docs under `docs/planning/`.
+- Implementation stage: build against the approved brief and plan, and do not reopen settled scope by default.
 - Ask before big decisions (architecture, new dependencies or tools, scope changes, anything hard to reverse). Within a stage, proceed without asking about small things.
 - **Current stage: {{CURRENT_STAGE}}.**
 
