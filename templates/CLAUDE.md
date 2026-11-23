@@ -13,6 +13,14 @@
 - Ask before big decisions (architecture, new dependencies or tools, scope changes, anything hard to reverse). Within a stage, proceed without asking about small things.
 - **Current stage: {{CURRENT_STAGE}}.**
 
+### Sizing the work: when to write a brief and a plan
+Work comes in three sizes. Match the paperwork to the size.
+- **Small change** (a fix, a wording change, a tweak inside something that exists): no brief or plan. Add a line to `docs/current/todo.md`, add a line to `docs/current/decision-tracker.md` if a decision was made, then do it.
+- **New feature** (a self-contained capability): a midweight brief and plan. First go through clarification and refinement with me using AskUserQuestion, one question at a time, until you are highly confident you understand what I want. Then write one short document in `docs/brief/features/<feature-name>.md` covering what it is, why, what success looks like, what is in and out of scope, the steps in order, and open questions. Add one line to the `docs/brief/` index. Wait for my approval before writing code. When the feature is live, archive the document with `git mv`.
+- **Set of features** (for example an MVP build, or a major new area): a full brief in `docs/brief/` and a full plan in `docs/planning/implementation-plan.md`, with task order, dependencies and what can run in parallel. Go through the same clarification and refinement with AskUserQuestion first, and go deeper than for a single feature. Wait for my approval of the brief and the plan before writing code.
+
+When a request is not clearly one of these sizes, ask me which it is before starting, using AskUserQuestion. When it is clearly one of them, say which size you assumed and carry on. If a request changes who the product is for or its overall scope, update the main brief and ask me first.
+
 ## Communication
 - Be concise and direct. Lead with the conclusion; give a recommendation rather than a survey of options.
 - Explain technical decisions in plain language: what it is, why it matters, and the trade-off. Define jargon the first time.
