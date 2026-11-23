@@ -15,14 +15,15 @@ Hand it to anyone starting a project, or to an AI agent, and say "set this proje
 
 ## The core principles
 
-Everything in the kit follows from six ideas. Each comes with the reason, so you can judge it and change it.
+Everything in the kit follows from seven ideas. Each comes with the reason, so you can judge it and change it.
 
 1. Plan before building. Claude works from what it is told, and a vague start produces work that has to be redone. So Claude drafts a brief and a plan with you first, and builds only once you approve them.
-2. Claude writes the notes, at set moments. Claude forgets everything between sessions, so written notes are the project's only memory. Claude writes them from your conversation, and updates them at a few fixed moments so they stay current without constant upkeep.
-3. Delegate the heavy work to specialist helpers. Claude's main conversation is its working memory, and it has a size limit. Big jobs, such as reading dozens of files, trying options or running tests, would fill it quickly and make Claude slower, costlier and less sharp. So Claude hands those jobs to a helper that works in its own separate space and reports back a short summary. The main conversation stays small and focused, long sessions stay sharp, and helpers can work side by side.
-4. Keep what Claude reads at the start small, and index the rest. Whatever Claude loads at the start of a session costs time and money every time. The kit keeps that load short, and gives each docs folder a short index so Claude opens only the file a task needs.
-5. Safe by default. Harmless commands run without asking. Pushing code and deleting things ask first, and destructive commands are blocked, so Claude can move quickly without risking your work.
-6. Claude looks after git, and your main folder stays current. You should not have to manage version control. Claude keeps your main folder on the project's main branch, does branch work in separate copies, and tells you what has not been pushed.
+2. Claude asks instead of assuming. When something is unclear, Claude stops and asks using Claude Code's built-in question tool: short multiple-choice questions that you answer with a click, with its recommended option first and a free-text "Other" always available. A wrong guess costs far more than a ten-second question, and your answers become decisions Claude writes down.
+3. Claude writes the notes, at set moments. Claude forgets everything between sessions, so written notes are the project's only memory. Claude writes them from your conversation, and updates them at a few fixed moments so they stay current without constant upkeep.
+4. Delegate the heavy work to specialist helpers. Claude's main conversation is its working memory, and it has a size limit. Big jobs, such as reading dozens of files, trying options or running tests, would fill it quickly and make Claude slower, costlier and less sharp. So Claude hands those jobs to a helper that works in its own separate space and reports back a short summary. The main conversation stays small and focused, long sessions stay sharp, and helpers can work side by side.
+5. Keep what Claude reads at the start small, and index the rest. Whatever Claude loads at the start of a session costs time and money every time. The kit keeps that load short, and gives each docs folder a short index so Claude opens only the file a task needs.
+6. Safe by default. Harmless commands run without asking. Pushing code and deleting things ask first, and destructive commands are blocked, so Claude can move quickly without risking your work.
+7. Claude looks after git, and your main folder stays current. You should not have to manage version control. Claude keeps your main folder on the project's main branch, does branch work in separate copies, and tells you what has not been pushed.
 
 ## How the setup works
 
@@ -53,6 +54,12 @@ By default Claude does not start building straight away. A project moves through
 3. Build. Once you approve the plan, Claude builds against it and does not reopen settled decisions unless you ask.
 
 Big decisions, such as architecture, new tools or anything hard to undo, always come to you first, whatever the stage. Mistakes are cheapest to fix while they are still words on a page, and an approved brief and plan give every later session, and every helper agent, the same picture of what is being built. If a project is already under way, tell Claude which stage it is at and it starts there. You can rename the stages or change the rule in the Workflow section of `CLAUDE.md`.
+
+## How Claude asks you questions
+
+Claude Code has a built-in question tool, and the kit tells Claude to use it whenever it is not highly confident it understands a request. Instead of guessing, or burying questions in a long message, Claude shows a short multiple-choice question in the interface. You pick an option with a click, or type your own answer in the "Other" box. Claude puts the option it recommends first and explains each choice in a line, so you can decide quickly without needing the technical background.
+
+Claude asks a few related questions at a time, and a question can be about anything from the wording of the brief to how far a change should go. If Claude has to make an assumption anyway, it says so and asks for your approval first. Your answers feed straight into the notes: an answer that is a decision becomes a line in the decision tracker, and answers during the brief stage become the brief. If you would like fewer questions on a small project, relax the "Clarification and assumptions" section of `CLAUDE.md`.
 
 ## Where the notes come from
 
@@ -88,7 +95,7 @@ You can ask "which helper would you use for this?" at any time. To add a helper 
 This is the whole routine once the project is set up.
 
 1. Start a session. Open Claude Code in the project folder and start talking. Claude reads its rulebook and `next-steps.md` on its own. If you want a summary, ask "where are we?".
-2. Ask for work. Describe what you want. Early in a project Claude takes you through the brief and the plan before it builds anything (see "Brief, plan, then build"). Later it asks questions if anything is unclear, hands large jobs to a specialist helper and reads only the short report it sends back (see "How helpers work"), and does small edits itself. Anything big or hard to undo comes to you for a decision first.
+2. Ask for work. Describe what you want, and answer Claude's questions as they come up (see "How Claude asks you questions"). Early in a project Claude takes you through the brief and the plan before it builds anything (see "Brief, plan, then build"). Later it asks questions if anything is unclear, hands large jobs to a specialist helper and reads only the short report it sends back (see "How helpers work"), and does small edits itself. Anything big or hard to undo comes to you for a decision first.
 3. While something is in progress, Claude leaves the notes alone, which keeps them free of clutter.
 4. When a piece of work is done, Claude ticks its line in the to-do list. "Done" means the tests pass and the work is saved.
 5. When you decide something ("let's go with option B"), Claude adds one line to the decision tracker with the reason.

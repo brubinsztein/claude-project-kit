@@ -20,7 +20,7 @@ Shared context used by more than one project: `shared/README.md` (index). Read o
 - For any human-facing writing (reports, one-pagers, summaries), follow `shared/writing-style-rules.md` if it exists.
 
 ## Clarification and assumptions
-- Lean toward asking, not assuming. Use the AskUserQuestion tool for clarifying questions until you are highly confident you understand the request.
+- Lean toward asking, not assuming. Use the AskUserQuestion tool for clarifying questions: short multiple-choice questions, one small group at a time, with your recommended option first and a line on each choice. Keep asking until you are highly confident you understand the request.
 - If you must make an assumption, state it and get my approval before relying on it.
 - Flag uncertainty and anything unverified rather than guessing silently.
 - If I name a specific tool or skill, use exactly that, and say plainly if it was not used.

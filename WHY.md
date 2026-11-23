@@ -18,14 +18,15 @@ This page explains each part of the kit and what you can change. You do not need
 
 ## The core principles
 
-Claude has no memory between sessions, and it reads whatever is in front of it. Two things decide how well a project goes: what is written down for the next session, and how much Claude has to read before it can start. Six principles follow from that, and each section below covers one:
+Claude has no memory between sessions, and it reads whatever is in front of it. Two things decide how well a project goes: what is written down for the next session, and how much Claude has to read before it can start. Seven principles follow from that, and each section below covers one:
 
 1. Plan before building (section 1).
-2. Claude writes the notes, at set moments (sections 2 and 3).
-3. Delegate the heavy work to specialist helpers (section 5).
-4. Keep what Claude reads at the start small, and index the rest (sections 4 and 9).
-5. Safe by default (section 6).
-6. Claude looks after git, and your main folder stays current (section 7).
+2. Claude asks instead of assuming (section 2).
+3. Claude writes the notes, at set moments (sections 3 and 4).
+4. Delegate the heavy work to specialist helpers (section 6).
+5. Keep what Claude reads at the start small, and index the rest (sections 5 and 10).
+6. Safe by default (section 7).
+7. Claude looks after git, and your main folder stays current (section 8).
 
 ## 1. Plan before building
 
@@ -33,13 +34,21 @@ Claude works from what it is told, and a vague start produces work that has to b
 
 An approved brief and plan also help later. Each new session, and each helper agent, starts from the same written picture of what is being built, instead of guessing from the code. This rule is in the Workflow section of `CLAUDE.md`. For a small project you can relax it by editing that section.
 
-## 2. How the notes get created
+## 2. Claude asks instead of assuming
+
+Claude is good at producing something plausible from a vague request, which is the risk: the work looks right and is wrong in a way nobody notices until later. So the rulebook tells Claude to lean toward asking and to keep asking until it is highly confident it understands. If it has to assume, it says so and gets your approval before relying on it.
+
+Claude asks through Claude Code's built-in question tool. It shows short multiple-choice questions in the interface, one small group at a time, with the recommended option first and a line explaining each choice. You answer with a click, or type your own answer in the always-available "Other" box. This works better than questions buried in a paragraph of text, because each question is clear and answerable in seconds, nothing is missed, and you do not need technical background to choose. Claude's recommendation does the heavy thinking, and your answer settles it.
+
+The answers do real work. In the brief stage they become the brief, and elsewhere an answer that is a decision becomes one line in the decision tracker with its reason. The "Clarification and assumptions" section of `CLAUDE.md` sets this behaviour, and you can relax it on a small project if you want fewer questions.
+
+## 3. How the notes get created
 
 Claude writes the notes from your conversation, and you approve them. The brief comes from Claude's questions and your answers. The plan is drafted once the brief is approved. The to-do list is built from the plan, and new ideas are added as you raise them. Each decision you state becomes one line in the decision tracker with its reason. Focused design notes and reference docs are written when a feature or a stable fact needs recording, and each gets a line in its folder's index. `README.md` has a table of every kind of note, when it is created and who writes it.
 
 Because Claude does the writing, the notes stay consistent in format and you only have to review them. You can say "write that down" at any point to capture something, and you can edit any note by hand.
 
-## 3. Notes that stay current
+## 4. Notes that stay current
 
 Three small files act as the project's memory. `next-steps.md` says where things stand and what to read first. `docs/current/todo.md` lists what is next. `docs/current/decision-tracker.md` records decisions and the reason for each.
 
@@ -53,7 +62,7 @@ There is one handoff, in `next-steps.md`, and no pile of dated notes. A new sess
 
 The moments for updating notes are written in the "Keeping docs current" section of `CLAUDE.md`, and the wrap-up steps are in `templates/.claude/skills/session-checkpoint/SKILL.md`. Change them there.
 
-## 4. Folders Claude can navigate
+## 5. Folders Claude can navigate
 
 Each docs folder (`docs/planning/`, `docs/reference/`) has a short `README.md` that lists only what is current. Finished or superseded material lives in `docs/archive/`, and a `.rgignore` file tells Claude's search to skip the archive by default.
 
@@ -63,7 +72,7 @@ This helps Claude find the right document quickly and keeps outdated material fr
 
 You can change the folder names and decide what counts as finished. If a script or test reads a file, leave the file in place, or update the script when you move it.
 
-## 5. Delegating to specialist helpers
+## 6. Delegating to specialist helpers
 
 Claude's main conversation is its working memory. It holds your messages, the files Claude has read and everything it has done so far, and it has a size limit. A big job, such as reading thirty files to find where something is defined, trying three approaches or running a long test suite, can fill it with material that is no longer needed. Claude then gets slower and costlier, and it can lose track of earlier decisions.
 
@@ -79,7 +88,7 @@ How it works in practice:
 
 You get a short report in place of a long trail of work, and the helper that knows the area does the job. You can add, remove or rename helpers, and adjust how big a job must be before it is handed over (the "Delegation" section of `CLAUDE.md`). Add a helper only when work keeps going to the wrong place, because every helper's description is loaded into every session. The starter kit has an implementation coder and a docs maintainer, and you add more for jobs your project repeats.
 
-## 6. Permissions
+## 7. Permissions
 
 The settings file `.claude/settings.json` says which commands Claude may run freely, which must ask first, and which are blocked:
 - Allowed without asking: read-only commands (looking at history, listing files, searching), saving work, and running your tests.
@@ -90,26 +99,26 @@ Personal, machine-specific rules go in `.claude/settings.local.json`. That file 
 
 You get few interruptions for safe actions and a pause before anything risky. You can add generic rules for commands you use often. Never put a password or key in a rule.
 
-## 7. The main folder stays on the main branch
+## 8. The main folder stays on the main branch
 
 `CLAUDE.md` says the folder you work in always stays on the project's main branch. Branch work happens in a separate working copy (a worktree), and after a merge Claude brings your folder up to date.
 
 New sessions therefore always start from the current rules and notes, and you never have to manage git yourself. The branch name is set during setup.
 
-## 8. Where each kind of rule lives
+## 9. Where each kind of rule lives
 
 - **CLAUDE.md:** rules every helper needs. Keep it short, because it is loaded every session and costs tokens every time.
 - **Memory:** things Claude has learned about you and your corrections. Only the main conversation sees memory, not helpers. Review it now and then against `CLAUDE.md` and your docs, and delete duplicates and out-of-date entries.
 - **Project docs:** facts about the project. Put a rule next to the file it governs, for example the to-do list's structure in the to-do file's own header.
 - **Skills:** procedures you use sometimes. Only their one-line description loads each session.
 
-## 9. Keeping the startup load light
+## 10. Keeping the startup load light
 
 Everything Claude loads at the start of a session is paid for on every session: the rulebook, the memory index, and the one-line description of every skill, agent and add-on. The kit keeps these short and moves detail into places Claude reads only when needed, such as indexes, skills and reference docs.
 
 Before you add or remove an add-on, measure what it costs. Estimates can be well off, and removing something for a small gain wastes effort. Open a fresh session and run `/context` to see the starting size and what makes it up. Run `claude plugin details <name>` to see what one add-on costs every session. After a change, check again in a fresh session.
 
-## 10. Several projects in one workspace
+## 11. Several projects in one workspace
 
 If your projects share a lot of context, keeping them in one workspace folder works well. How Claude loads things explains how the kit is arranged for it:
 - Claude loads the `CLAUDE.md` in the folder it starts in and in every folder above it. It loads a `CLAUDE.md` in a subfolder only when it reads or edits a file there.
