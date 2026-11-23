@@ -16,9 +16,16 @@ This page explains each part of the kit and what you can change. You do not need
 - **Workspace:** a folder that holds one or several projects and is what you open Claude Code in. A project is often a git repository of its own.
 - **Worktree:** an extra working copy of the same project, used so an agent can change files without disturbing your main folder.
 
-## The idea behind all of it
+## The core principles
 
-Claude has no memory between sessions, and it reads whatever is in front of it. Two things decide how well a project goes: what is written down for the next session, and how much Claude has to read before it can start. The kit keeps the written-down part short and current, and keeps the read-at-start part small.
+Claude has no memory between sessions, and it reads whatever is in front of it. Two things decide how well a project goes: what is written down for the next session, and how much Claude has to read before it can start. Six principles follow from that, and each section below covers one:
+
+1. Plan before building (section 1).
+2. Claude writes the notes, at set moments (sections 2 and 3).
+3. Delegate the heavy work to specialist helpers (section 5).
+4. Keep what Claude reads at the start small, and index the rest (sections 4 and 9).
+5. Safe by default (section 6).
+6. Claude looks after git, and your main folder stays current (section 7).
 
 ## 1. Plan before building
 
@@ -56,17 +63,21 @@ This helps Claude find the right document quickly and keeps outdated material fr
 
 You can change the folder names and decide what counts as finished. If a script or test reads a file, leave the file in place, or update the script when you move it.
 
-## 5. Specialist helpers
+## 5. Delegating to specialist helpers
 
-Each recurring kind of job can have a helper, defined in a small file under `.claude/agents/`. The starter kit has an implementation coder and a docs maintainer. Add more for jobs your project repeats.
+Claude's main conversation is its working memory. It holds your messages, the files Claude has read and everything it has done so far, and it has a size limit. A big job, such as reading thirty files to find where something is defined, trying three approaches or running a long test suite, can fill it with material that is no longer needed. Claude then gets slower and costlier, and it can lose track of earlier decisions.
 
-Claude chooses a helper mainly from its one-line description. So each description says when to use the helper, names the project's real files and keywords, and starts with "Use proactively when...". `CLAUDE.md` holds a table of five lines or fewer that matches task types to helpers. Each helper has its tools and model set explicitly. Each brief gives the goal, the files in scope, where to stop, and a report limit of 15 lines.
+So the kit has Claude delegate. A helper (a subagent) is started for one job. It works in its own separate space, does the reading and editing there, and sends back only a short summary. The main conversation keeps just that summary, so it stays small and focused, and a long session stays sharp. Helpers on separate jobs can also run side by side, each in its own working copy, which makes big pieces of work faster.
 
-Large, research-heavy or parallel work goes to a helper. Claude does small edits itself, because starting a helper has its own cost and a helper cannot ask you a question halfway through. If you name a particular tool or skill, the brief repeats it and Claude checks that the report shows it was used.
+The main conversation acts as the project manager. It talks with you, makes the plan, writes a brief for each job, and checks the report that comes back. Helpers do not merge, push or deploy, so you stay in control of what leaves your machine.
 
-Work lands with the helper that knows the area, reports come back short, and Claude's main conversation stays uncluttered.
+How it works in practice:
+- Each helper is defined in a small file under `.claude/agents/`. Claude chooses a helper mainly from its one-line description, so each description says when to use the helper, names the project's real files and keywords, and starts with "Use proactively when...". `CLAUDE.md` holds a table of five lines or fewer that matches task types to helpers. Each helper has its tools and model set explicitly.
+- Each brief gives the goal, the files in scope, where to stop, and a report limit of 15 lines. A narrow brief keeps a helper from wandering into extra work, and a request to look at something is not a request to build it.
+- If you name a particular tool or skill, the brief repeats it and Claude checks that the report shows it was used.
+- Large, research-heavy, file-heavy or parallel work goes to a helper. Claude does small edits itself, because starting a helper has a cost of its own (it begins with a blank slate and must read what it needs) and a helper cannot ask you a question halfway through.
 
-You can add, remove or rename helpers, and adjust how big a job must be before it is handed over (the "Delegation" section of `CLAUDE.md`). Add a helper only when work keeps going to the wrong place, because every helper's description is loaded into every session.
+You get a short report in place of a long trail of work, and the helper that knows the area does the job. You can add, remove or rename helpers, and adjust how big a job must be before it is handed over (the "Delegation" section of `CLAUDE.md`). Add a helper only when work keeps going to the wrong place, because every helper's description is loaded into every session. The starter kit has an implementation coder and a docs maintainer, and you add more for jobs your project repeats.
 
 ## 6. Permissions
 

@@ -26,7 +26,7 @@ Shared context used by more than one project: `shared/README.md` (index). Read o
 - If I name a specific tool or skill, use exactly that, and say plainly if it was not used.
 
 ## Delegation
-Delegate large, research-heavy, file-heavy or parallel work to a specialist; do single-file or few-line edits directly in the main chat. Use general-purpose only when no specialist fits. Each project's `CLAUDE.md` lists its own specialists.
+The main chat plans, decides with me, briefs helpers and checks their results. Helpers do the heavy reading and editing in their own space and return a short summary, which keeps the main conversation small. Delegate large, research-heavy, file-heavy or parallel work to a specialist; do single-file or few-line edits directly in the main chat. Use general-purpose only when no specialist fits. Each project's `CLAUDE.md` lists its own specialists.
 Brief narrowly: goal, files in scope, a stop condition and a return format of at most 15 lines. Always say which project the work is in. Name any skill the agent must run, and check the report shows it ran. Agents do not merge, push or sync deployments.
 
 ## Engineering principles

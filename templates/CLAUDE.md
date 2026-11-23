@@ -36,7 +36,7 @@
 - Flag uncertainty and anything unverified rather than guessing silently.
 
 ## Delegation
-Delegate large, research-heavy, file-heavy or parallel work to a specialist; do single-file or few-line edits directly in the main chat. Use general-purpose only when no specialist fits.
+The main chat plans, decides with me, briefs helpers and checks their results. Helpers do the heavy reading and editing in their own space and return a short summary, which keeps the main conversation small. Delegate large, research-heavy, file-heavy or parallel work to a specialist; do single-file or few-line edits directly in the main chat. Use general-purpose only when no specialist fits.
 {{AGENT_TABLE}}  (one line per agent: the task type, then the agent name)
 Brief narrowly: goal, files in scope, a stop condition and a return format of at most 15 lines. Name any skill the agent must run, and check the report shows it ran. A "probe" is not an integration. Agents do not merge, push or sync deployments.
 

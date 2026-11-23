@@ -13,6 +13,17 @@ Hand it to anyone starting a project, or to an AI agent, and say "set this proje
 - Harmless commands run without asking, anything that pushes code or deletes things asks first, and destructive commands are blocked.
 - Less to read at the start means lower cost and a clearer head for the real work.
 
+## The core principles
+
+Everything in the kit follows from six ideas. Each comes with the reason, so you can judge it and change it.
+
+1. Plan before building. Claude works from what it is told, and a vague start produces work that has to be redone. So Claude drafts a brief and a plan with you first, and builds only once you approve them.
+2. Claude writes the notes, at set moments. Claude forgets everything between sessions, so written notes are the project's only memory. Claude writes them from your conversation, and updates them at a few fixed moments so they stay current without constant upkeep.
+3. Delegate the heavy work to specialist helpers. Claude's main conversation is its working memory, and it has a size limit. Big jobs, such as reading dozens of files, trying options or running tests, would fill it quickly and make Claude slower, costlier and less sharp. So Claude hands those jobs to a helper that works in its own separate space and reports back a short summary. The main conversation stays small and focused, long sessions stay sharp, and helpers can work side by side.
+4. Keep what Claude reads at the start small, and index the rest. Whatever Claude loads at the start of a session costs time and money every time. The kit keeps that load short, and gives each docs folder a short index so Claude opens only the file a task needs.
+5. Safe by default. Harmless commands run without asking. Pushing code and deleting things ask first, and destructive commands are blocked, so Claude can move quickly without risking your work.
+6. Claude looks after git, and your main folder stays current. You should not have to manage version control. Claude keeps your main folder on the project's main branch, does branch work in separate copies, and tells you what has not been pushed.
+
 ## How the setup works
 
 Claude forgets everything between sessions. Whatever is not written in a file is gone, and whatever Claude must read at the start of a session costs time and money. Left alone, projects drift into out-of-date notes and a heavy startup load. The kit sets up a few parts that work together to avoid both.
@@ -58,12 +69,26 @@ Claude writes the notes from your conversation. You make the decisions and appro
 | "Where we are" (`next-steps.md`) | Rewritten by the wrap-up routine at the end of each session. | Claude |
 | Memory (kept outside the project) | When you correct Claude or state a preference. | Claude |
 
+## How helpers work
+
+Think of the main conversation as a project manager and the helpers as specialists. The main conversation talks with you, makes the plan, writes the brief for each job, and checks the result. A helper takes one job, reads what it needs, makes the changes, runs the tests, and reports back in at most 15 lines. You see a short report in place of the hundreds of lines of work behind it.
+
+A few rules keep this working well:
+- Each helper has a one-line description saying when to use it, and `CLAUDE.md` holds a table of five lines or fewer that matches task types to helpers. Claude uses the table to pick.
+- Large, research-heavy, file-heavy or parallel work goes to a helper. Claude does small edits itself, because starting a helper has its own cost and a helper cannot ask you a question halfway through.
+- Every brief gives the goal, the files in scope, where to stop, and the report format. A narrow brief stops a helper from wandering into extra work. A request to look at something is not a request to build it.
+- If you name a particular tool or skill, the brief repeats it, and Claude checks the report shows it was used.
+- Helpers do not merge, push or deploy. They hand that back, so you stay in control of what leaves your machine.
+- Helpers on separate jobs can run at the same time, each in its own working copy, so they do not overwrite each other's files.
+
+You can ask "which helper would you use for this?" at any time. To add a helper for a job your project repeats, see "Things you can change".
+
 ## Day to day: how you use it
 
 This is the whole routine once the project is set up.
 
 1. Start a session. Open Claude Code in the project folder and start talking. Claude reads its rulebook and `next-steps.md` on its own. If you want a summary, ask "where are we?".
-2. Ask for work. Describe what you want. Early in a project Claude takes you through the brief and the plan before it builds anything (see "Brief, plan, then build"). Later it asks questions if anything is unclear, hands large jobs to a specialist helper, and does small edits itself. Anything big or hard to undo comes to you for a decision first.
+2. Ask for work. Describe what you want. Early in a project Claude takes you through the brief and the plan before it builds anything (see "Brief, plan, then build"). Later it asks questions if anything is unclear, hands large jobs to a specialist helper and reads only the short report it sends back (see "How helpers work"), and does small edits itself. Anything big or hard to undo comes to you for a decision first.
 3. While something is in progress, Claude leaves the notes alone, which keeps them free of clutter.
 4. When a piece of work is done, Claude ticks its line in the to-do list. "Done" means the tests pass and the work is saved.
 5. When you decide something ("let's go with option B"), Claude adds one line to the decision tracker with the reason.
