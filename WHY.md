@@ -30,9 +30,13 @@ Claude has no memory between sessions, and it reads whatever is in front of it. 
 
 ## 1. Plan before building
 
-Claude works from what it is told, and a vague start produces work that has to be redone. So by default a project goes through a brief, then a plan, then the build, and Claude stays in each stage until you approve the next. In the brief stage Claude asks clarifying questions one at a time and writes the answers down. In the plan stage it lays out the steps, their order and their dependencies, with technical detail in separate focused documents so the plan itself stays readable. Big or hard-to-undo decisions always come to you first.
+Claude works from what it is told, and a vague start produces work that has to be redone. So Claude drafts a brief and a plan with you and builds only once you approve them. But a one-line fix should not need a document, and an MVP needs more than a feature does. So the rule is sized: a small change gets a line in the to-do list; a new feature gets a short brief and then a plan in one file; a set of features, such as an MVP build, gets a full product brief and a full implementation plan. Claude says which size it is treating a request as, adds a one-line read of how complex it is (small, medium or sprawling, measured by how many parts of the project it touches, not by time, because time estimates mean little when Claude does the building), and asks you to confirm. When unsure, it treats the work as the larger size.
 
-An approved brief and plan also help later. Each new session, and each helper agent, starts from the same written picture of what is being built, instead of guessing from the code. This rule is in the Workflow section of `CLAUDE.md`. For a small project you can relax it by editing that section.
+The kit has no project-wide "stage". Projects do not all go brief, plan, build in one pass: they start with a full brief and then add features one at a time. So each feature has its own status (brief, plan, build, live), shown in the to-do list's "where we are" block. Small tweaks to something that is live do not need a new brief.
+
+Each brief or plan is agreed in the same way. Claude first asks only what it needs to write a draft. It then hands the draft over with a link and stops, because the draft often contains context you need before you can answer the finer questions. When you say you are ready, Claude asks those refinement questions, each with its own context, and you approve the result. Technical choices (language, database, hosting) go through the same questions, with a recommendation and the trade-off in plain words, because a non-technical owner cannot be expected to know them unaided.
+
+Two more habits cut rework. For work that changes what people see, Claude offers a visual-only mock-up first, so you can commit to the design before real data or backend work is added. And before a feature is called done, Claude checks it against the brief's success criteria and says plainly if it did not look at something visual. An approved brief and plan also help later: each new session, and each helper agent, starts from the same written picture of what is being built. All of this is in the Workflow section of `CLAUDE.md`. For a small project you can relax it by editing that section.
 
 ## 2. Claude asks instead of assuming
 
@@ -40,11 +44,11 @@ Claude is good at producing something plausible from a vague request, which is t
 
 Claude asks through Claude Code's built-in question tool. It shows short multiple-choice questions in the interface, one small group at a time, with the recommended option first and a line explaining each choice. You answer with a click, or type your own answer in the always-available "Other" box. This works better than questions buried in a paragraph of text, because each question is clear and answerable in seconds, nothing is missed, and you do not need technical background to choose. Claude's recommendation does the heavy thinking, and your answer settles it.
 
-The answers do real work. In the brief stage they become the brief, and elsewhere an answer that is a decision becomes one line in the decision tracker with its reason. The "Clarification and assumptions" section of `CLAUDE.md` sets this behaviour, and you can relax it on a small project if you want fewer questions.
+The answers do real work. While a brief or plan is being written they go into that document, and elsewhere an answer that is a decision becomes one line in the decision tracker with its reason. Questions come in two phases: a few up front so Claude can draft, and refinement questions after you have read the draft, so you answer with the document in front of you. The "Clarification and assumptions" section of `CLAUDE.md` sets this behaviour, and you can relax it on a small project if you want fewer questions.
 
 ## 3. How the notes get created
 
-Claude writes the notes from your conversation, and you approve them. The brief comes from Claude's questions and your answers. The plan is drafted once the brief is approved. The to-do list is built from the plan, and new ideas are added as you raise them. Each decision you state becomes one line in the decision tracker with its reason. Focused design notes and reference docs are written when a feature or a stable fact needs recording, and each gets a line in its folder's index. `README.md` has a table of every kind of note, when it is created and who writes it.
+Claude writes the notes from your conversation, and you approve them. The brief comes from Claude's questions and your answers, and each feature's brief and plan live in one file in `docs/brief/features/`. The plan is drafted once the brief is approved. `docs/reference/what-exists-today.md` records what is live, because briefs are archived once a feature ships. The to-do list is built from the plan, and new ideas are added as you raise them. Each decision you state becomes one line in the decision tracker with its reason. Focused design notes and reference docs are written when a feature or a stable fact needs recording, and each gets a line in its folder's index. `README.md` has a table of every kind of note, when it is created and who writes it.
 
 Because Claude does the writing, the notes stay consistent in format and you only have to review them. You can say "write that down" at any point to capture something, and you can edit any note by hand.
 
@@ -53,10 +57,10 @@ Because Claude does the writing, the notes stay consistent in format and you onl
 Two small files act as the project's memory. `docs/current/todo.md` starts with a short "where we are" block that says where things stand and what to read first, then lists what is next. `docs/current/decision-tracker.md` records decisions and the reason for each.
 
 Updates happen at set moments:
-- While work is in progress, nothing is updated.
-- When a piece of work is finished (its tests pass and it is saved), one line in the to-do list is ticked.
+- While work is in progress there is no running commentary in the notes. The to-do line is added when the work starts.
+- When a piece of work is finished (its tests pass and it is saved), its to-do line is ticked and the feature's status is updated.
 - When you make a decision, one line goes in the decision tracker.
-- At the end of a session, the wrap-up routine compares what was saved with what the to-do list says, fixes any gaps, and rewrites the short "where we are" block at the top of the to-do list.
+- At the end of a session, the wrap-up routine compares what was saved with what the to-do list says, checks the feature documents in `docs/brief/`, fixes any gaps, and rewrites the short "where we are" block at the top of the to-do list.
 
 There is one handoff, the "where we are" block at the top of the to-do list, and no pile of dated notes. A new session can start from these two short files and know the state of the project. The notes need no constant upkeep, and half-finished work does not clutter them.
 

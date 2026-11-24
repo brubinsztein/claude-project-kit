@@ -2,7 +2,7 @@
 
 A ready-made way of working with Claude Code, Anthropic's AI assistant that reads and edits files in your project folder. The kit gives Claude a short rulebook, a small set of project notes that stay up to date, specialist helpers for recurring jobs, and safe permission settings.
 
-Hand it to anyone starting a project, or to an AI agent, and say "set this project up". No coding knowledge is needed. It assumes Claude Code is installed and your project is in a git repository (git keeps the history of your files). Terms you may not know are explained in `WHY.md`.
+Hand it to anyone starting a project, or to an AI agent, and say "set this project up". No coding knowledge is needed. It assumes Claude Code is installed. If your project is not yet in a git repository (git keeps the history of your files), or you are starting from nothing, setup creates one for you. Terms you may not know are explained in `WHY.md`.
 
 ## What you get
 
@@ -17,7 +17,7 @@ Hand it to anyone starting a project, or to an AI agent, and say "set this proje
 
 Everything in the kit follows from seven ideas. Each comes with the reason, so you can judge it and change it.
 
-1. Plan before building. Claude works from what it is told, and a vague start produces work that has to be redone. So Claude drafts a brief and a plan with you first, and builds only once you approve them.
+1. Plan before building. Claude works from what it is told, and a vague start produces work that has to be redone. So Claude drafts a brief and a plan with you first, lets you read them before it asks its detailed questions, and builds only once you approve them.
 2. Claude asks instead of assuming. When something is unclear, Claude stops and asks using Claude Code's built-in question tool: short multiple-choice questions that you answer with a click, with its recommended option first and a free-text "Other" always available. A wrong guess costs far more than a ten-second question, and your answers become decisions Claude writes down.
 3. Claude writes the notes, at set moments. Claude forgets everything between sessions, so written notes are the project's only memory. Claude writes them from your conversation, and updates them at a few fixed moments so they stay current without constant upkeep.
 4. Delegate the heavy work to specialist helpers. Claude's main conversation is its working memory, and it has a size limit. Big jobs, such as reading dozens of files, trying options or running tests, would fill it quickly and make Claude slower, costlier and less sharp. So Claude hands those jobs to a helper that works in its own separate space and reports back a short summary. The main conversation stays small and focused, long sessions stay sharp, and helpers can work side by side.
@@ -47,19 +47,31 @@ End of session:     the wrap-up routine fixes any gaps and refreshes the "where 
 
 ## Brief, plan, then build
 
-By default Claude does not start building straight away. A project moves through three stages, and Claude stays in each one until you approve moving on.
+By default Claude does not start building straight away. How much planning a request gets depends on its size, and Claude tells you which size it is treating the request as, with a one-line read of how complex it is, and asks you to confirm.
 
-1. Brief. Claude asks you clarifying questions, one at a time, and writes the answers into a short product brief: what you are making, who it is for, and what success looks like.
-2. Plan. Once you approve the brief, Claude drafts a step-by-step implementation plan: the tasks in order, what depends on what, and what can run in parallel. The plan stays at a middle level of detail, and deeper technical detail goes in separate focused documents that the plan links to.
-3. Build. Once you approve the plan, Claude builds against it and does not reopen settled decisions unless you ask.
+| Size | What it is | What Claude does |
+|---|---|---|
+| Small change | A fix or tweak inside something that exists. No new capability, data source, database change, dependency or scheduled job; easy to undo; one short sitting. | Adds a line to the to-do list, does it, ticks it. No brief or plan. |
+| New feature | A self-contained capability. | A short brief, then a plan, each approved by you, kept in one file in `docs/brief/features/`. Then builds. |
+| Set of features | For example an MVP build or a major new area. | The same two approvals with a full product brief and a full implementation plan. Deeper questions. |
 
-Big decisions, such as architecture, new tools or anything hard to undo, always come to you first, whatever the stage. Mistakes are cheapest to fix while they are still words on a page, and an approved brief and plan give every later session, and every helper agent, the same picture of what is being built. If a project is already under way, tell Claude which stage it is at and it starts there. You can rename the stages or change the rule in the Workflow section of `CLAUDE.md`.
+If it is unclear which size applies, Claude treats the request as the larger one and says why. There is no project-wide stage. Each feature has its own status: brief, plan, build, live. The to-do list shows each feature in flight with its status. A live feature can still get small tweaks without a new brief.
+
+For every brief and plan, Claude follows the same four steps:
+1. Scoping questions. Claude asks only what it needs to be confident enough to write a first draft.
+2. Draft and review. Claude writes the draft and sends you a short message with a link to open it, what to look at and the open questions. Then it stops. You read the draft, which often answers questions you would otherwise have to guess, and say when you are ready.
+3. Refinement. Claude asks the remaining questions, each with its own context and a recommended option, and writes your answers into the document. You approve it.
+4. The brief is approved first, then the plan goes through steps 2 and 3. Claude builds only after the plan is approved.
+
+For work that changes what people see, Claude offers a visual-only mock-up first, with fake data and minimal effort. You review it and commit to the design before any real data or backend work, which avoids rework. You can decline the offer.
+
+Big decisions, such as architecture, tools, language, database, hosting or anything hard to undo, always come to you first, each with Claude's recommendation and the trade-off in plain words. Before Claude calls a feature done, it reports against the brief's success criteria and says plainly if something visual was not viewed. If you change direction or drop a feature, Claude archives its brief and plan and records the decision. Feedback from other people becomes to-do or Parked lines. You can change any of this in the Workflow section of `CLAUDE.md`.
 
 ## How Claude asks you questions
 
 Claude Code has a built-in question tool, and the kit tells Claude to use it whenever it is not highly confident it understands a request. Instead of guessing, or burying questions in a long message, Claude shows a short multiple-choice question in the interface. You pick an option with a click, or type your own answer in the "Other" box. Claude puts the option it recommends first and explains each choice in a line, so you can decide quickly without needing the technical background.
 
-Claude asks a few related questions at a time, and a question can be about anything from the wording of the brief to how far a change should go. If Claude has to make an assumption anyway, it says so and asks for your approval first. Your answers feed straight into the notes: an answer that is a decision becomes a line in the decision tracker, and answers during the brief stage become the brief. If you would like fewer questions on a small project, relax the "Clarification and assumptions" section of `CLAUDE.md`.
+Claude asks a few related questions at a time, and a question can be about anything from the wording of the brief to how far a change should go. If Claude has to make an assumption anyway, it says so and asks for your approval first. Your answers feed straight into the notes: an answer that is a decision becomes a line in the decision tracker, and answers while a brief or plan is being written go into that document. Claude asks the up-front scoping questions straight away, but holds the finer refinement questions until you have read the draft and said you are ready. If you would like fewer questions on a small project, relax the "Clarification and assumptions" section of `CLAUDE.md`.
 
 ## Where the notes come from
 
@@ -67,13 +79,13 @@ Claude writes the notes from your conversation. You make the decisions and appro
 
 | Note | Created when | Written by |
 |---|---|---|
-| Product brief (`docs/brief/`) | At the start, from Claude's questions and your answers. Updated when the shape of the product changes. | Claude drafts, you approve |
-| Feature brief (`docs/brief/features/`) | When a new feature is asked for. Claude first asks clarifying questions, then writes a short brief for your approval, then adds a plan to the same document for your approval. An index line is added, and it is archived when the feature is live. | Claude drafts, you approve |
-| Implementation plan (`docs/planning/`) | After the brief is approved. | Claude drafts, you approve |
+| Product brief (`docs/brief/`) | At the start of a set of features such as an MVP, from Claude's questions and your answers. Also the template for feature briefs. Updated when the shape of the product changes. | Claude drafts, you approve |
+| Feature brief (`docs/brief/features/`) | When a new feature is asked for. Claude asks scoping questions, writes a short brief, hands it over for you to read, asks the refinement questions when you are ready, and gets your approval. It then adds a plan to the same document and repeats. An index line is added, and it is archived when the feature is live. | Claude drafts, you approve |
+| Implementation plan (`docs/planning/`) | After the product brief is approved. Includes a "Technical approach" section for choices such as language, database and hosting, made with you through questions. | Claude drafts, you approve |
 | To-do list (`docs/current/todo.md`) | Built from the plan. New ideas are added as next steps or parked as you raise them. Ticked when work lands. | Claude |
 | Decision tracker (`docs/current/decision-tracker.md`) | One line each time you decide something, with the reason. | Claude |
 | Focused design notes (`docs/planning/`) | When a feature needs thinking through. An index line is added, and the note is archived when the work is finished. | Claude |
-| Reference docs (`docs/reference/`) | When something stable needs writing down, such as how to run the project or a map of the code. An index line is added. | Claude |
+| Reference docs (`docs/reference/`) | When something stable needs writing down, such as how to run the project or a map of the code. An index line is added. `what-exists-today.md` is updated each time a feature goes live, so there is always a plain record of what the product does now. | Claude |
 | "Where we are" (top of `docs/current/todo.md`) | Rewritten by the wrap-up routine at the end of each session. | Claude |
 | Memory (kept outside the project) | When you correct Claude or state a preference. | Claude |
 
@@ -96,9 +108,9 @@ You can ask "which helper would you use for this?" at any time. To add a helper 
 This is the whole routine once the project is set up.
 
 1. Start a session. Open Claude Code in the project folder and start talking. Claude reads its rulebook and the top of the to-do list on its own. If you want a summary, ask "where are we?".
-2. Ask for work. Describe what you want, and answer Claude's questions as they come up (see "How Claude asks you questions"). Early in a project Claude takes you through the brief and the plan before it builds anything (see "Brief, plan, then build"). Later it asks questions if anything is unclear, hands large jobs to a specialist helper and reads only the short report it sends back (see "How helpers work"), and does small edits itself. Anything big or hard to undo comes to you for a decision first.
-3. While something is in progress, Claude leaves the notes alone, which keeps them free of clutter.
-4. When a piece of work is done, Claude ticks its line in the to-do list. "Done" means the tests pass and the work is saved.
+2. Ask for work. Describe what you want. Claude says which size it is treating the work as and asks you to confirm. Then answer its questions as they come up (see "How Claude asks you questions"). For anything beyond a small change, Claude takes you through a brief and a plan before it builds (see "Brief, plan, then build"), and waits for you to read each draft. Later it asks questions if anything is unclear, hands large jobs to a specialist helper and reads only the short report it sends back (see "How helpers work"), and does small edits itself. Anything big or hard to undo comes to you for a decision first.
+3. While something is in progress, Claude adds no running commentary to the notes, which keeps them free of clutter. The to-do line goes in when work starts.
+4. When a piece of work is done, Claude ticks its line in the to-do list and updates the feature's status. "Done" means the tests pass and the work is saved, and for a feature, that Claude has reported against its success criteria.
 5. When you decide something ("let's go with option B"), Claude adds one line to the decision tracker with the reason.
 6. At the end of a session, say "run the checkpoint" (or "wrap up"). Claude compares what was saved with what the notes say, fixes anything missed, rewrites the short "where we are" block, saves everything, and tells you what has not been pushed to the shared copy. It asks before pushing.
 7. Next session, a fresh Claude picks up from the to-do list.
@@ -131,16 +143,16 @@ Follow these steps in order. Never overwrite a file that already exists: if one 
    - Whether this is a single project or a shared workspace that holds several projects. If it is a shared workspace, follow "Setting up a shared workspace" below as well.
    - Project name and a one-line description.
    - The owner's role and how technical they are (this fills "About me" and sets how much you explain).
-   - Whether the project is new (it starts at the brief) or already under way, and if so which stage it is at and which notes already exist.
-   - The main branch name, and whether a remote repository exists.
-   - The command that runs the tests, and where the tests and main code live.
+   - Whether the project is new (it starts with a product brief) or already under way, and if so which features exist and what status each has (brief, plan, build or live), and which notes already exist.
+   - Whether a git repository exists. If not, run `git init` after asking, and use the main branch name the owner chooses (suggest `main`). Also whether a remote repository exists.
+   - The command that runs the tests, and where the tests and main code live. If there are no tests yet, say so: leave the test-command permission line out of `.claude/settings.json` and add "set up tests" as an early step in the plan.
    - The project's guardrails (things agents must never do), if any.
    - Which kinds of work come up often (for example writing code, writing reports, researching), so you know which agents to keep and which new ones to add.
 2. Copy the templates from `templates/` into the project root, keeping the folder layout. Replace every `{{PLACEHOLDER}}` using the answers (table below). If an answer is unknown, ask rather than guess.
 3. Agents: keep only the agents the project needs. Rewrite each description to name the project's real files and keywords ("Use proactively when..."), and fill the agent table in `CLAUDE.md` (five lines or fewer). Remove any agent file you do not use.
 4. Permissions: set the test command prefix in `.claude/settings.json`. Leave project-specific one-off permissions out; they build up in `.claude/settings.local.json`, which stays out of git.
-5. Git: make sure `.claude/.gitignore` is in place and the main working folder is on the main branch. Make one initial commit of the setup. Do not push unless asked.
-6. Start the notes. For a new project, interview the owner one question at a time (AskUserQuestion) to draft `docs/brief/product-brief.md` from the template, and stop for approval. Once the brief is approved, draft `docs/planning/implementation-plan.md` from its template and stop for approval again. Then build the first "Next steps" in `docs/current/todo.md` from the plan, and fill in the "Where we are" block at the top of that file. For a project already under way, ask where its existing notes are, summarise them into the two working notes, and record which stage it is at.
+5. Git: make sure `.claude/.gitignore` is in place, create `docs/archive/` (the template `done-log.md` is already there) and `docs/brief/features/`, and make sure the main working folder is on the main branch. Make one initial commit of the setup. Do not push unless asked.
+6. Start the notes. Treat a new project as a set of features and follow "How a brief or plan gets agreed" in `CLAUDE.md`: scoping questions with AskUserQuestion, then draft `docs/brief/product-brief.md` from the template, hand it over for review with a link, and stop. When the owner says they are ready, ask the refinement questions and get approval. Then do the same for `docs/planning/implementation-plan.md`, including its "Technical approach" section (language, database, hosting and so on, each asked with a recommendation, and if the owner is not technical, explain the trade-off in plain words). Then build the first "Next steps" in `docs/current/todo.md` from the plan, and fill in the "Where we are" block at the top of that file, listing features in flight with their status. For a project already under way, ask where its existing notes are, summarise them into the two working notes, and record each feature's status.
 7. Baseline: run `/context` in a fresh session and note the starting size in `docs/current/decision-tracker.md`, so later changes can be measured.
 8. Report to the owner in plain language: what was created, what to review, and the routine in "Day to day" above.
 
@@ -148,7 +160,6 @@ Follow these steps in order. Never overwrite a file that already exists: if one 
 |---|---|
 | `{{PROJECT_NAME}}`, `{{DATE}}` | Project name; today's date |
 | `{{ABOUT_ME}}` | The owner's role and how technical they are |
-| `{{CURRENT_STAGE}}` | The stage the project is at (brief, plan or implementation) |
 | `{{MAIN_BRANCH}}` | The main branch name |
 | `{{TEST_COMMAND_PREFIX}}` | The command that runs tests (for example `python -m pytest`) |
 | `{{AGENT_TABLE}}` | One line per kept agent: task type, then agent name |
@@ -175,7 +186,7 @@ workspace/
 
 What goes where:
 - The workspace `CLAUDE.md` holds the rules that stay the same across projects: how to communicate, when to ask, how big a job must be before it goes to a helper, and how to handle git. It also lists the projects, one line each. Every session loads it, so keep it short.
-- Each project's own `CLAUDE.md` holds only its stage, its guardrails, its helpers and where its notes are. Use `templates/workspace/project-CLAUDE.md`.
+- Each project's own `CLAUDE.md` holds only its workflow and sizing rules, its guardrails, its helpers and where its notes are. Use `templates/workspace/project-CLAUDE.md`.
 - Each project keeps its own working notes (the to-do list with its "where we are" block, and the decision tracker). Leave project status out of the workspace files; they only point to each project.
 - `shared/` holds background more than one project needs, such as who your audiences are or your writing rules. Add one line to its index for each file. If only one project needs something, keep it in that project.
 
@@ -210,11 +221,12 @@ For a general assistant workspace, keep the rulebook, the two working notes, the
 |---|---|
 | `templates/CLAUDE.md` | The rulebook. |
 | `templates/docs/current/todo.md`, `templates/docs/current/decision-tracker.md` | The two working notes. |
-| `templates/docs/brief/product-brief.md`, `templates/docs/planning/implementation-plan.md` | Starting points for the brief and the plan that Claude drafts with you. |
+| `templates/docs/brief/product-brief.md`, `templates/docs/brief/features/`, `templates/docs/planning/implementation-plan.md` | Starting points for the brief (also the template for feature briefs) and the plan that Claude drafts with you. |
+| `templates/docs/reference/what-exists-today.md`, `templates/docs/archive/done-log.md` | A short record of what is live, and the log that older "Recently done" lines move to. |
 | `templates/.claude/skills/session-checkpoint/` | The wrap-up routine. |
 | `templates/.claude/agents/` | Two starter helpers: an implementation coder and a docs maintainer. |
 | `templates/.claude/settings.json`, `templates/.claude/.gitignore` | Permissions, and git ignore rules that keep personal settings out of the repository. |
-| `templates/docs/planning/README.md`, `templates/docs/reference/README.md`, `templates/.rgignore` | Folder indexes, and the search ignore that skips the archive. |
+| `templates/docs/brief/README.md`, `templates/docs/planning/README.md`, `templates/docs/reference/README.md`, `templates/.rgignore` | Folder indexes, and the search ignore that skips the archive. |
 | `templates/workspace/` | For a workspace that holds several projects: the workspace rulebook, a lean per-project rulebook, the shared-context index, and a checkpoint skill that covers every project. |
 | `WHY.md` | How each part works and what it gives you. Start here to understand or change the setup. |
 
@@ -222,7 +234,7 @@ For a general assistant workspace, keep the rulebook, the two working notes, the
 
 None of this is fixed. Change what suits your project, and read the matching section of `WHY.md` first so you know what it was doing.
 
-- Stages and tone: the workflow stages and the "Communication" rules in `CLAUDE.md`. If you would rather not plan first on a small project, relax the "plan before coding" rule there.
+- Workflow and tone: the sizing rules, the review flow and the "Communication" rules in `CLAUDE.md`. If you would rather not plan first on a small project, relax the "plan before coding" rule there.
 - Helpers: add, remove or rename agents. To add one for a job your project repeats, copy `templates/.claude/agents/implementation-coder.md`, change its name and description (say when to use it and name the real files), and add a line to the agent table in `CLAUDE.md`. Keep the table to five lines or fewer.
 - Permissions: add generic rules for commands you use often. Never put a password or key in a rule.
 - The wrap-up routine: its steps are in `templates/.claude/skills/session-checkpoint/SKILL.md`. Add a step if your project needs one.
@@ -245,3 +257,15 @@ When your setup improves, change the kit in the same sitting: update the templat
 - 23 Nov 2026: first version.
 - 23 Nov 2026: added guidance and templates for a workspace that holds several projects; removed MEASURING.md.
 - 23 Nov 2026: merged `next-steps.md` into the top of the to-do list, so there are two working notes instead of three.
+- 24 Nov 2026 (version 2.0): gap review. Removed the project-wide "Current stage" and added a status per feature (brief, plan, build, live). Added the work-sizing rule (small change, new feature, set of features) with a complexity read and a confirmation step. Added the review hand-over flow (scoping questions, draft with a link, refinement questions when the owner is ready), the visual mock-up option for UI work, a success check before a feature is ticked done, and short procedures for a change of direction and for feedback. Briefs and plans now live per feature in `docs/brief/features/`, using `product-brief.md` as the template. Added a "Technical approach" section to the plan template, `what-exists-today.md`, `docs/archive/done-log.md`, brief reconciliation in both checkpoint skills, and corrected the docs-maintainer's folders. Setup now covers no repository and no tests. Added `git worktree add` and `git merge` to the allowed commands (not yet tested).
+
+## Bringing an existing project up to date
+
+Each project's `CLAUDE.md` ends with a line `Kit version: X`. A project with no such line was set up from version 1.x. To update it:
+
+1. Open Claude Code in the project and say: "Read `<path to this kit>/README.md`. Bring this project up to date with the kit, from the version it was set up with, using 'Bringing an existing project up to date'. Show me each change before you make it."
+2. Claude reads the lines above in "Keeping the kit current" that are newer than the project's version, and compares the project's `CLAUDE.md`, working notes, skills and agents with the matching files in `templates/`.
+3. For each difference, Claude explains it in plain words and asks whether to apply it. It never overwrites a file without showing the change first, and it keeps anything the project has customised (agents, guardrails, the agent table, project-specific rules).
+4. Claude updates the `Kit version` line, runs the checkpoint skill, and commits. It does not push.
+
+For version 2.0, the main changes to carry over are: replace the Workflow section of `CLAUDE.md`; remove the stage line from the "Where we are" block and list features in flight instead; add `docs/brief/features/`, `docs/reference/what-exists-today.md` and `docs/archive/done-log.md`; add the "Technical approach" section to the plan; and update both checkpoint skills and the docs-maintainer agent.

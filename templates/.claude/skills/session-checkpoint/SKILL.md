@@ -19,12 +19,13 @@ End a working session cleanly: make the two working docs match reality, commit, 
    - For each commit, check the matching item is ticked or moved. Fix any that are not.
    - Keep "Recently done" to at most 3 one-liners; move older entries to `docs/archive/done-log.md`.
    - "Now" and "Next steps" hold only live items, in order.
-3. Reconcile `docs/current/decision-tracker.md`: record any decision made this session that is missing; archive entries about finished one-offs or older than about 7 days unless they still describe live behaviour.
-4. Rewrite the "Where we are" block at the top of `docs/current/todo.md` (at most 6 lines): current stage, state in one or two sentences, what to read first, and the `Last checkpoint` hash (the current HEAD before you commit).
-5. Stage only the intended files and commit with a clear message.
-6. Report:
+3. Reconcile `docs/brief/`: each feature document's status (brief, plan, build, live) matches the work, each has a line in the `docs/brief/README.md` index, and a live feature's document is archived with `git mv` and its line removed. Check `docs/reference/what-exists-today.md` was updated for anything that went live.
+4. Reconcile `docs/current/decision-tracker.md`: record any decision made this session that is missing; archive entries about finished one-offs or older than about 7 days unless they still describe live behaviour.
+5. Rewrite the "Where we are" block at the top of `docs/current/todo.md` (at most 6 lines): features in flight with their status, state in one or two sentences, what to read first, and the `Last checkpoint` hash (the current HEAD before you commit).
+6. Stage only the intended files and commit with a clear message.
+7. Report:
    - commit hash and branch
    - number of unpushed commits (ask whether to push)
-   - what changed in each of the two docs
+   - what changed in each of the two docs, and any feature whose status changed
    - last known test status
    - anything intentionally left out of the commit

@@ -17,8 +17,9 @@ Each project in this workspace is its own git repository with its own `docs/curr
 1. List the project folders listed in the workspace `CLAUDE.md`. For each, run `git -C <folder> status --short` and `git -C <folder> log` since its last checkpoint (the `Last checkpoint` hash in the "Where we are" block of its `docs/current/todo.md`). Skip projects with no changes and no new commits.
 2. For each project that changed, in turn:
    - Reconcile its `docs/current/todo.md`: tick or move items for each commit, keep "Recently done" to at most 3 one-liners (older entries to its `docs/archive/done-log.md`), and keep "Now" and "Next steps" to live items.
+   - Reconcile its `docs/brief/`: feature statuses (brief, plan, build, live), the index lines, live features archived with `git mv`, and `docs/reference/what-exists-today.md` updated for anything that went live.
    - Reconcile its `docs/current/decision-tracker.md`: record decisions made this session that are missing, and archive entries about finished one-offs.
-   - Rewrite the "Where we are" block at the top of its `docs/current/todo.md` (at most 6 lines): stage, state, what to read first, and the `Last checkpoint` hash.
+   - Rewrite the "Where we are" block at the top of its `docs/current/todo.md` (at most 6 lines): features in flight with their status, state, what to read first, and the `Last checkpoint` hash.
    - Stage only the intended files and commit with a clear message, using `git -C <folder>`.
 3. If this session changed anything in `shared/`, update `shared/README.md` and commit it in whichever repository holds it (or note that it is not in a repository).
 4. Report, per project: commit hash and branch, number of unpushed commits (ask whether to push), what changed in each of the two docs, last known test status, and anything intentionally left out of the commit.
