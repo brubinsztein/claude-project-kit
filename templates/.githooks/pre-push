@@ -1,0 +1,29 @@
+#!/bin/sh
+# Kit guard: runs before every push. It never blocks. If the project has a
+# .githooks/pre-push-reminder.txt and code (not only docs) is being pushed to
+# the main branch, it prints that file as a reminder.
+
+ROOT=$(git rev-parse --show-toplevel) || exit 0
+HOOKS="$ROOT/.githooks"
+[ -f "$HOOKS/config.sh" ] && . "$HOOKS/config.sh"
+MAIN_BRANCH=${MAIN_BRANCH:-main}
+[ -f "$HOOKS/pre-push-reminder.txt" ] || exit 0
+
+zero=0000000000000000000000000000000000000000
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ "$remote_ref" = "refs/heads/$MAIN_BRANCH" ] || continue
+  [ "$local_sha" = "$zero" ] && continue
+  if [ "$remote_sha" = "$zero" ]; then
+    changed="code"
+  else
+    changed=$(git diff --name-only "$remote_sha" "$local_sha" 2>/dev/null \
+      | grep -v -E '^docs/|\.md$' | head -1)
+  fi
+  if [ -n "$changed" ]; then
+    echo ""
+    cat "$HOOKS/pre-push-reminder.txt"
+    echo ""
+    break
+  fi
+done
+exit 0

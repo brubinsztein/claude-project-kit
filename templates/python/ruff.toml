@@ -1,0 +1,15 @@
+# Kit starter for Python projects. Copy to the project root as ruff.toml.
+# The guard (.githooks/guard.py) runs ruff only when this file exists, and only
+# findings on lines added by a change count, so old code is never blocked.
+#
+# Start with the rules about silencing warnings. Add rules the project already
+# passes, or ones it wants for new code. If you add RUF100 (unused suppressions),
+# also select every rule the project silences, or RUF100 will flag those comments.
+
+target-version = "py312"
+
+[lint]
+select = [
+  "PGH003",  # type: ignore with no rule named
+  "PGH004",  # noqa with no rule named
+]

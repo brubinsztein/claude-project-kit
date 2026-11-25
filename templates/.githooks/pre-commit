@@ -1,0 +1,50 @@
+#!/bin/sh
+# Kit guard: runs before every commit. A failed check stops the commit and
+# says what to do instead. To commit anyway the owner must say so in that turn;
+# the bypass is then `git commit --no-verify`.
+#
+# A  the main working folder must stay on the main branch (worktrees are exempt)
+# B  project-specific checks, if .githooks/project-checks.sh exists
+# C  silencing comments need a reason          (guard.py)
+# D  comments must not excuse a quick fix      (guard.py)
+# R  ruff on added lines, if the project has a ruff.toml (guard.py)
+
+ROOT=$(git rev-parse --show-toplevel) || exit 0
+cd "$ROOT" || exit 0
+HOOKS="$ROOT/.githooks"
+[ -f "$HOOKS/config.sh" ] && . "$HOOKS/config.sh"
+MAIN_BRANCH=${MAIN_BRANCH:-main}
+fail=0
+
+# --- A: main folder stays on the main branch
+gitdir=$(cd "$(git rev-parse --git-dir)" && pwd -P)
+common=$(cd "$(git rev-parse --git-common-dir)" && pwd -P)
+if [ "$gitdir" = "$common" ]; then
+  branch=$(git symbolic-ref --short -q HEAD || true)
+  if [ -n "$branch" ] && [ "$branch" != "$MAIN_BRANCH" ]; then
+    echo "BLOCKED (guard A): this is the main working folder and it is on branch '$branch', not '$MAIN_BRANCH'."
+    echo "  Do branch work in a separate worktree: git worktree add ../<name> -b <branch>"
+    echo "  Or switch back first: git switch $MAIN_BRANCH"
+    fail=1
+  fi
+fi
+
+# --- B: project-specific checks (reads the staged file names on stdin)
+if [ -x "$HOOKS/project-checks.sh" ]; then
+  git diff --cached --name-only --diff-filter=ACMR | "$HOOKS/project-checks.sh" || fail=1
+fi
+
+# --- C, D, R: comment and lint checks on added lines
+if command -v python3 >/dev/null 2>&1; then
+  python3 "$HOOKS/guard.py" staged || fail=1
+else
+  echo "BLOCKED: python3 was not found, so the comment checks cannot run."
+  fail=1
+fi
+
+if [ "$fail" -ne 0 ]; then
+  echo ""
+  echo "Commit stopped. Fix the points above. Only if the owner says so in this turn: git commit --no-verify"
+  exit 1
+fi
+exit 0

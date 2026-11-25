@@ -1,0 +1,7 @@
+# Copy to .githooks/config.sh and edit. Optional: every line has a default.
+
+# The branch the main working folder must stay on.
+# MAIN_BRANCH=main
+
+# Where ruff lives, if it is not on the PATH or in ./.venv/bin (Python projects with a ruff.toml only).
+# RUFF_BIN="$HOME/.news-insights/venv/bin/ruff"
