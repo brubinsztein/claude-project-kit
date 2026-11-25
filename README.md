@@ -250,6 +250,14 @@ These are personal choices and sit outside the kit. The numbers come from one pr
 - context-mode keeps very large outputs out of the conversation and adds session search. It kept about 91% of large-output bytes out of the chat over a week.
 - caveman makes replies terse. Its fixed cost was about 2.6k tokens per session plus about 1.2k per helper. Its own report could not confirm a saving, so test it before keeping it.
 
+## When the product gets bigger: keep a feature map
+
+This is guidance for a real product with real users, not for a prototype or an MVP. Do not build it earlier.
+
+A feature map is a short list of every screen and control in the product, named from the user's side, for example "the filter bar on the Dashboard" or "the Topic detail page". Keep it in `docs/reference/` and link it from the project's `CLAUDE.md`.
+
+Why it helps: when you say "the thingy in the left sidebar", Claude has to guess which one you mean. With a feature map you and Claude use the same names, and checks that drive the product (a browser test, a screenshot review) can say exactly which part they looked at. Add an entry whenever a feature ships, and remove it when the feature is retired. Source: Lauren Tan's talk "All Code Is Slop (Except Mine)" (AI Engineer CODE 2026), where the team keeps one for their app.
+
 ## Keeping the kit current
 
 When your setup improves, change the kit in the same sitting: update the template, then add a line below.

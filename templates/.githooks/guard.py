@@ -30,6 +30,7 @@ SUPPRESS = re.compile(
     r"(noqa|type:\s*ignore|pylint:\s*disable|eslint-disable(?:-next-line|-line)?"
     r"|@ts-ignore|@ts-expect-error|nosec)"
 )
+BLANKET_TYPE_IGNORE = re.compile(r"type:\s*ignore(?!\[)")
 REASON = re.compile(r"\s--\s+\S+\s+\S+")  # " -- " then at least two words
 EXCUSE = re.compile(
     r"\b(work-?arounds?|hack(?:y|s)?|quick[- ]fix(?:es)?|temporary fix(?:es)?"
@@ -134,7 +135,14 @@ def check_comments(added):
             if comment is None:
                 continue
             suppress = SUPPRESS.search(comment)
-            if suppress and not REASON.search(comment[suppress.end():]):
+            if suppress and BLANKET_TYPE_IGNORE.search(comment):
+                # ruff's own PGH003 misses "type: ignore -- reason", so the guard checks it.
+                problems.append(
+                    "%s:%d: BLOCKED (guard C): 'type: ignore' must name the rule in brackets "
+                    "and give a reason, for example '# type: ignore[assignment] -- why'. "
+                    "Better: fix the type problem instead." % (path, number)
+                )
+            elif suppress and not REASON.search(comment[suppress.end():]):
                 problems.append(
                     "%s:%d: BLOCKED (guard C): a comment silences a warning but gives no "
                     "reason. Add ' -- <why this is safe, in plain words>' after it, or fix "
