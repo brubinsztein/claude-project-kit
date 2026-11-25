@@ -4,4 +4,4 @@
 # MAIN_BRANCH=main
 
 # Where ruff lives, if it is not on the PATH or in ./.venv/bin (Python projects with a ruff.toml only).
-# RUFF_BIN="$HOME/.news-insights/venv/bin/ruff"
+# RUFF_BIN="$HOME/.venvs/myproject/bin/ruff"
