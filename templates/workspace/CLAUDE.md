@@ -33,6 +33,9 @@ Brief narrowly: goal, files in scope, a stop condition and a return format of at
 - Keep it simple. No over-engineering, speculative abstractions or unrequested features.
 - Only do what was asked; mention nice-to-haves instead of building them.
 - No automated tests for one-off experiments or offline analysis code until I decide to ship them. Tests are required for anything that touches live code.
+- **A correction becomes a check.** When I correct you for the same thing a second time, do not just add a line to a rulebook. Propose an automatic check (a lint rule, a test or a hook in the project's `.githooks/`) that fails when the rule is broken, with an error message that says what to do instead, and ask me before adding it.
+- **Automatic checks.** Where a project has `.githooks/`, its checks run on every commit and after each file edit. When one blocks, fix the cause. Use `git commit --no-verify` only when I say so in that turn.
+- **Comments.** Do not write comments that justify a workaround; fix the root cause. A comment that silences a warning (`noqa`, `type: ignore`, `eslint-disable`) must give a reason after ` -- `, and only after fixing the code is not possible.
 
 ## Git
 - Commit at important milestones with clear messages. Push only when I ask, and tell me about unpushed commits at the end of a session.
