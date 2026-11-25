@@ -5,7 +5,7 @@
 
 ROOT=$(git rev-parse --show-toplevel) || exit 0
 HOOKS="$ROOT/.githooks"
-[ -f "$HOOKS/config.sh" ] && . "$HOOKS/config.sh"
+if [ -f "$HOOKS/config.sh" ]; then set -a; . "$HOOKS/config.sh"; set +a; fi
 MAIN_BRANCH=${MAIN_BRANCH:-main}
 [ -f "$HOOKS/pre-push-reminder.txt" ] || exit 0
 

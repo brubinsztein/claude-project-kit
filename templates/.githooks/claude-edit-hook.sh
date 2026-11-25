@@ -16,7 +16,7 @@ except Exception:
 ROOT=$(git -C "$(dirname "$file")" rev-parse --show-toplevel 2>/dev/null) || exit 0
 [ -f "$ROOT/.githooks/guard.py" ] || exit 0
 cd "$ROOT" || exit 0
-[ -f .githooks/config.sh ] && . .githooks/config.sh
+if [ -f .githooks/config.sh ]; then set -a; . .githooks/config.sh; set +a; fi
 
 msg=$(python3 .githooks/guard.py file "$file" 2>&1)
 status=$?
