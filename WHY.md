@@ -136,6 +136,16 @@ Two points are worth checking on your machine. Parent-folder settings may not be
 
 The README section "Several projects in one workspace" has the layout and the steps for adding or moving a project.
 
+## 12. Automatic checks
+
+**What it is.** A small set of scripts in `.githooks/` that run by themselves: before each commit, before a push, and right after Claude edits a file. A failed check stops the action and says what to do instead.
+
+**What it gives you.** A written rule in `CLAUDE.md` can be skipped or forgotten. A check that fails cannot. Lauren Tan's talk "All Code Is Slop (Except Mine)" makes this point: when you correct an agent, turn the correction into a check, so you have less to look for in review.
+
+**The starter checks.** The main folder stays on the main branch; a comment that silences a warning must give a reason; a comment must not excuse a quick fix (workaround, hack and similar); and, for Python projects, ruff. They look only at added lines, so old code never blocks. You can add your own in `project-checks.sh`.
+
+**Trade-off.** A check can occasionally stop something legitimate. The owner can allow a one-off bypass with `git commit --no-verify`. Hooks are per clone and need one setup line.
+
 ## How much to trust these choices
 
 The firm points come from Claude Code's official documentation: the descriptions of add-ons and skills load every session, agents are chosen by their description, deny rules are checked before allow rules, and detail should load only when needed. Other choices, such as how short a rulebook should be and when to hand work to a helper, come from experience and community advice. Treat them as sensible starting points. Keep the ones that measurably help your project and drop the ones that do not.
